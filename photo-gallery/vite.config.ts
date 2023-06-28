@@ -17,5 +17,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom'
-  }
+  },
+  optimizeDeps: {
+    exclude: [`@ionic/pwa-elements/loader`],
+  },
 })
