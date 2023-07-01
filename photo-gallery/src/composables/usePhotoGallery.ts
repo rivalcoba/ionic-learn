@@ -3,6 +3,13 @@ import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 
+export interface UserPhoto {
+  filepath: string;
+  webviewPath?: string;
+}
+
+const photos = ref<UserPhoto[]>([]);
+
 export const usePhotoGallery = () => {
     const takePhoto = async () => {
       const photo = await Camera.getPhoto({
@@ -10,9 +17,18 @@ export const usePhotoGallery = () => {
         source: CameraSource.Camera,
         quality: 100,
       });
+      
+      const fileName = Date.now() + '.jpeg';
+      const savedFileImage = {
+        filepath: fileName,
+        webviewPath: photo.webPath
+      };
+
+      photos.value = [savedFileImage, ...photos.value];
     };
   
     return {
+      photos,
       takePhoto,
     };
   };
