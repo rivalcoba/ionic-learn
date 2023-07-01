@@ -1,4 +1,4 @@
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, resolveComponent } from 'vue';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
@@ -8,7 +8,20 @@ export interface UserPhoto {
   webviewPath?: string;
 }
 
+const convertBlobToBase64 = (blob: Blob) => new Promise((res, rej) => {
+  const reader = new FileReader();
+  reader.onerror = rej;
+  reader.onload = () => {
+    res(reader.result);
+  };
+  reader.readAsDataURL(blob);
+});
+
 const photos = ref<UserPhoto[]>([]);
+
+const savePicture = async (photo: Photo, fileName: string): Promise<UserPhoto> => {
+  // TODO: https://ionicframework.com/docs/vue/your-first-app/saving-photos
+}
 
 export const usePhotoGallery = () => {
     const takePhoto = async () => {
